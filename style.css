@@ -1,0 +1,9 @@
+svg {
+    width: 100%;
+    height: 20em;
+    background: #eee;
+}
+
+rect {
+    fill: blue;
+}
