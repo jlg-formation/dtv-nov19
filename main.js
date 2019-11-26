@@ -1,4 +1,4 @@
-import { drawHisto } from "./histo.js";
+import { drawHisto } from "./histo-d3.js";
 
 console.log("start");
 
