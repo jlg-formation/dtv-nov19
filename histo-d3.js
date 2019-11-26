@@ -5,14 +5,14 @@ export function drawHisto(svg, data) {
   const height = 60;
   const margin = 20;
 
-  const x = d3
+  const selection = d3
     .select(svg)
     .selectAll("rect")
     .data(data);
 
-  console.log("x: ", x);
+  console.log("selection: ", selection);
 
-  x.enter()
+  selection.enter()
     .append("rect")
     .attr("x", 0)
     .attr("y", (d, i) => 10 + (height + margin) * i)
