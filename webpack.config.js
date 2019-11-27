@@ -1,4 +1,6 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   entry: "./src/main.js",
@@ -6,5 +8,19 @@ module.exports = {
     filename: "bundle.js",
     path: path.resolve(__dirname, "dist")
   },
-  devtool: "inline-source-map"
+  devtool: "none",
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html"
+    }),
+    new CopyWebpackPlugin([{ from: "src/assets", to: "assets" }])
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        loader: ["style-loader", "css-loader"]
+      }
+    ]
+  }
 };

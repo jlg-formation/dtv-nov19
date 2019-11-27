@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export function drawHisto(svg, data) {
   const scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
   console.log("scale: ", scale);

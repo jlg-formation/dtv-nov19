@@ -1,3 +1,7 @@
+import './style.css';
+import * as d3 from 'd3';
+
+
 import { drawHisto } from "./histo-d3.js";
 
 (async () => {
