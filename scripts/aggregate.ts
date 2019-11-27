@@ -10,7 +10,7 @@ function getCategories() {
     const categories: ICategory[] = [];
     fs.createReadStream(path.resolve(__dirname, "../data/catv.csv"))
       .pipe(parse({ headers: true }))
-      .on("data", row => {
+      .on("data", (row: ICategory) => {
         categories.push(row);
       })
       .on("end", () => {
