@@ -3,7 +3,12 @@ export function drawHisto(svg, data) {
   console.log("scale: ", scale);
 
   const height = 60;
-  const margin = 20;
+  const margin = 30;
+  const paddingTop = 20;
+  const offset = 5;
+  const paddingRight = 5;
+
+  const delayIncr = 100;
 
   const selection = d3
     .select(svg)
@@ -12,10 +17,36 @@ export function drawHisto(svg, data) {
 
   console.log("selection: ", selection);
 
-  selection.enter()
+  selection
+    .enter()
     .append("rect")
     .attr("x", 0)
-    .attr("y", (d, i) => 10 + (height + margin) * i)
-    .attr("width", d => scale * d.nbr)
-    .attr("height", height);
+    .attr("y", (d, i) => paddingTop + (height + margin) * i)
+    .attr("width", 0)
+    .attr("height", height)
+    .transition()
+    .duration(2000)
+    .delay((d, i) => (i * delayIncr) + 200)
+    .attr("width", d => scale * d.nbr);
+
+  selection
+    .enter()
+    .append("text")
+    .attr("x", 0)
+    .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
+    .attr("class", "label")
+    .text(d => d.name);
+
+  selection
+    .enter()
+    .append("text")
+    .attr("x", d => scale * d.nbr + paddingRight)
+    .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
+    .attr("class", "nbr")
+    .attr("opacity", "0")
+    .text(d => d.nbr)
+    .transition()
+    .duration(2000)
+    .delay((d, i) => (i * delayIncr) + 1000)
+    .attr("opacity", "1");
 }

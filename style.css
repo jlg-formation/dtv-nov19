@@ -7,3 +7,14 @@ svg {
 rect {
   fill: blue;
 }
+
+.label {
+  font-family: sans-serif;
+  font-size: 1em;
+}
+
+.nbr {
+  fill: blue;
+  font-family: sans-serif;
+  font-size: 1.2em;
+}
