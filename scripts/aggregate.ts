@@ -26,7 +26,7 @@ function getCategories() {
 
 const acc: IGroup[] = [];
 
-fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
+fs.createReadStream(path.resolve(__dirname, "../data/data.csv"))
   .pipe(parse({ headers: true }))
   .on("data", (row: IVehicule) => {
     // group
