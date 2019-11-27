@@ -1,9 +1,14 @@
-const fs = require("fs");
-const path = require("path");
-const csv = require("fast-csv");
+import * as fs from "fs";
+import * as path from "path";
+import * as csv from "fast-csv";
+
+interface Category {
+  id: string;
+  name: string;
+}
 
 function getCategories() {
-  return new Promise((resolve, reject) => {
+  return new Promise<Category[]>((resolve, reject) => {
     const categories = [];
     fs.createReadStream(path.resolve(__dirname, "../data/catv.csv"))
       .pipe(csv.parse({ headers: true }))
@@ -23,7 +28,7 @@ function getCategories() {
 
 const acc = [];
 
-fs.createReadStream(path.resolve(__dirname, "../data/data.csv"))
+fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
   .pipe(csv.parse({ headers: true }))
   .on("data", row => {
     // group

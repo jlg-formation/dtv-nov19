@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "d3": "^5.14.2",
-    "fast-csv": "^3.4.0"
+    "fast-csv": "^3.4.0",
+    "ts-node": "^8.5.2",
+    "typescript": "^3.7.2"
   }
 }
