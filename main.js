@@ -1,22 +1,14 @@
 import { drawHisto } from "./histo-d3.js";
 
-console.log("startxxx");
+(async () => {
+  try {
+    console.log("startxxx");
+    const data = await d3.dsv(",", "data/group.csv");
+    const svg = document.querySelector("svg");
+    drawHisto(svg, data);
 
-d3.dsv(",", "data/data.csv").then(function(data) {
-  const histoData = data.reduce((acc, d) => {
-    const group = acc.find(e => e.name === d.catv);
-    if (group) {
-      group.nbr++;
-    } else {
-      acc.push({ name: d.catv, nbr: 1 });
-    }
-    return acc;
-  }, []);
-
-  console.log("histoData: ", histoData);
-
-  const svg = document.querySelector("svg");
-  drawHisto(svg, histoData);
-
-  console.log("end");
-});
+    console.log("end");
+  } catch (e) {
+    console.error(e);
+  }
+})();
