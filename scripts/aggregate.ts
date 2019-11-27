@@ -7,7 +7,7 @@ import { IVehicule } from "./interfaces/Vehicule";
 
 function getCategories() {
   return new Promise<ICategory[]>((resolve, reject) => {
-    const categories = [];
+    const categories: ICategory[] = [];
     fs.createReadStream(path.resolve(__dirname, "../data/catv.csv"))
       .pipe(parse({ headers: true }))
       .on("data", row => {
