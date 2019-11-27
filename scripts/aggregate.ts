@@ -1,17 +1,15 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as csv from "fast-csv";
-
-interface Category {
-  id: string;
-  name: string;
-}
+import { parse, writeToString } from "fast-csv";
+import { Category } from "./interfaces/Category";
+import { Vehicule } from "./interfaces/Vehicule";
+import { Group } from "./interfaces/Group";
 
 function getCategories() {
   return new Promise<Category[]>((resolve, reject) => {
     const categories = [];
     fs.createReadStream(path.resolve(__dirname, "../data/catv.csv"))
-      .pipe(csv.parse({ headers: true }))
+      .pipe(parse({ headers: true }))
       .on("data", row => {
         categories.push(row);
       })
@@ -26,11 +24,11 @@ function getCategories() {
 
 // open a csv file
 
-const acc = [];
+const acc: Group[] = [];
 
 fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
-  .pipe(csv.parse({ headers: true }))
-  .on("data", row => {
+  .pipe(parse({ headers: true }))
+  .on("data", (row: Vehicule) => {
     // group
 
     const group = acc.find(e => e.name === row.catv);
@@ -45,7 +43,7 @@ fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
     try {
       const categories = await getCategories();
       acc.forEach(d => (d.name = categories.find(x => x.id === d.name).name));
-      const formattedCsv = await csv.writeToString(acc, {
+      const formattedCsv = await writeToString(acc, {
         headers: true,
         quoteColumns: [true, false]
       });
