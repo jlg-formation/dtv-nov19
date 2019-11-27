@@ -1,4 +1,4 @@
-export interface Vehicule {
+export interface IVehicule {
   Num_Acc: string;
   senc: string;
   catv: string;

@@ -1,12 +1,12 @@
+import { parse, writeToString } from "fast-csv";
 import * as fs from "fs";
 import * as path from "path";
-import { parse, writeToString } from "fast-csv";
-import { Category } from "./interfaces/Category";
-import { Vehicule } from "./interfaces/Vehicule";
-import { Group } from "./interfaces/Group";
+import { IGroup } from "./interfaces/Group";
+import { ICategory } from "./interfaces/Category";
+import { IVehicule } from "./interfaces/Vehicule";
 
 function getCategories() {
-  return new Promise<Category[]>((resolve, reject) => {
+  return new Promise<ICategory[]>((resolve, reject) => {
     const categories = [];
     fs.createReadStream(path.resolve(__dirname, "../data/catv.csv"))
       .pipe(parse({ headers: true }))
@@ -24,11 +24,11 @@ function getCategories() {
 
 // open a csv file
 
-const acc: Group[] = [];
+const acc: IGroup[] = [];
 
 fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
   .pipe(parse({ headers: true }))
-  .on("data", (row: Vehicule) => {
+  .on("data", (row: IVehicule) => {
     // group
 
     const group = acc.find(e => e.name === row.catv);
@@ -52,5 +52,7 @@ fs.createReadStream(path.resolve(__dirname, "../data/small-data.csv"))
         path.resolve(__dirname, "../data/group.csv"),
         formattedCsv
       );
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
   });
