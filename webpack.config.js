@@ -6,7 +6,7 @@ module.exports = (env, argv) => {
   const isProd = argv.mode === "production";
 
   return {
-    entry: "./src/main.js",
+    entry: "./src/main",
     output: {
       filename: "bundle.js",
       path: path.resolve(__dirname, "dist")
@@ -21,8 +21,16 @@ module.exports = (env, argv) => {
         { from: "data/group.csv", to: "data/group.csv" }
       ])
     ],
+    resolve: {
+      extensions: [ '.tsx', '.ts', '.js' ],
+    },
     module: {
       rules: [
+        {
+          test: /\.tsx?$/,
+          use: 'ts-loader',
+          exclude: /node_modules/,
+        },
         {
           test: /\.css$/,
           loader: ["style-loader", "css-loader"]
