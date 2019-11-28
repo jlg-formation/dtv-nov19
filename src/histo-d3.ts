@@ -36,15 +36,27 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
 
   function redraw() {
     redrawText();
+    redrawNbr();
+    redrawBar();
 
+    
+
+    //   selection
+
+    //     .text(d => d.nbr)
+    //     .transition()
+    //     .duration(2000)
+    //     .delay((d, i) => i * delayIncr + 1000)
+    //     .attr("opacity", "1");
+  }
+
+  function redrawNbr(){
     const selection = d3
-      .select(svg)
-      .selectAll("rect")
-      .data(data, (d: IGroup) => {
-        return d.name;
-      });
-
-    console.log("selection: ", selection);
+    .select(svg)
+    .selectAll("text.nbr")
+    .data(data, (d: IGroup) => {
+      return d.name;
+    });
 
     selection
       .exit()
@@ -60,53 +72,76 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .transition()
       .delay(500)
       .duration(500)
-      .attr("x", 0)
-      .attr("y", (d, i) => paddingTop + (height + margin) * i)
-      .attr("width", 0)
-      .attr("height", height)
-      .attr("width", d => {
-        console.log("update");
-        return scale * d.nbr;
-      });
+      .attr("x", d => scale * d.nbr + paddingRight)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
+      .attr("class", "nbr")
+      .text(d => d.nbr);
 
     selection
       .enter()
-      .append("rect")
-      .attr("x", 0)
-      .attr("y", (d, i) => paddingTop + (height + margin) * i)
-      .attr("width", 0)
-      .attr("height", height)
+      .append("text")
+      .attr("x", d => scale * d.nbr + paddingRight)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
+      .attr("class", "nbr")
+      .text(d => d.nbr)
+      .attr('opacity', 0)
       .transition()
       .duration(1000)
-      .attr("width", d => scale * d.nbr);
+      .attr('opacity', 1);
 
-    //   selection.enter().append("text");
 
-    //   selection
-    //     .attr("x", 0)
-    //     .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
-    //     .attr("class", "label")
-    //     .text(d => d.name);
+  }
 
-    //   selection.enter().append("text");
+  function redrawBar() {
+    const selection = d3
+    .select(svg)
+    .selectAll("rect")
+    .data(data, (d: IGroup) => {
+      return d.name;
+    });
 
-    //   selection
-    //     .attr("x", d => scale * d.nbr + paddingRight)
-    //     .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
-    //     .attr("class", "nbr")
-    //     .attr("opacity", "0")
-    //     .text(d => d.nbr)
-    //     .transition()
-    //     .duration(2000)
-    //     .delay((d, i) => i * delayIncr + 1000)
-    //     .attr("opacity", "1");
+  console.log("selection: ", selection);
+
+  selection
+    .exit()
+    .attr("opacity", 1)
+    .transition()
+    .delay(0)
+    .duration(500)
+    .attr("opacity", 0)
+    .transition()
+    .remove();
+
+  selection
+    .transition()
+    .delay(500)
+    .duration(500)
+    .attr("x", 0)
+    .attr("y", (d, i) => paddingTop + (height + margin) * i)
+    .attr("width", 0)
+    .attr("height", height)
+    .attr("width", d => {
+      console.log("update");
+      return scale * d.nbr;
+    });
+
+  selection
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", (d, i) => paddingTop + (height + margin) * i)
+    .attr("width", 0)
+    .attr("height", height)
+    .transition()
+    .duration(1000)
+    .attr("width", d => scale * d.nbr);
   }
 
   function redrawText() {
     console.log("redrawText: ", redrawText);
     const selection = d3
       .select(svg)
-      .selectAll("text")
+      .selectAll("text.label")
       .data(data, (d: IGroup) => {
         return d.name;
       });
