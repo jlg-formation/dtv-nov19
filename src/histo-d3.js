@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 
-export function drawHisto(svg, data) {
+export function drawHisto(element, data) {
+  const svg = element.querySelector("svg");
   const scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
   console.log("scale: ", scale);
 
@@ -51,4 +52,9 @@ export function drawHisto(svg, data) {
     .duration(2000)
     .delay((d, i) => (i * delayIncr) + 1000)
     .attr("opacity", "1");
+
+
+    element.querySelector(".sort").addEventListener("click", () => {
+      console.log("toto");
+    });
 }
