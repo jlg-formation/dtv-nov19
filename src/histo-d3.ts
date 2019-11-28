@@ -34,6 +34,12 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
     redraw();
   });
 
+  element.querySelector(".update-nbr").addEventListener("click", () => {
+    console.log("insert");
+    data[0].nbr = data[0].nbr / 2;
+    redraw();
+  });
+
   function redraw() {
     redrawText();
     redrawNbr();
@@ -117,10 +123,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .transition()
       .delay(500)
       .duration(500)
-      .attr("x", 0)
       .attr("y", (d, i) => paddingTop + (height + margin) * i)
-      .attr("width", 0)
-      .attr("height", height)
       .attr("width", d => {
         console.log("update");
         return scale * d.nbr;
