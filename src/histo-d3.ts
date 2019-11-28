@@ -1,5 +1,5 @@
-import * as d3 from 'd3';
-import { IGroup } from './interfaces/Group';
+import * as d3 from "d3";
+import { IGroup } from "./interfaces/Group";
 
 export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
@@ -14,48 +14,132 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
 
   const delayIncr = 100;
 
-  const selection = d3
-    .select(svg)
-    .selectAll("rect")
-    .data(data);
+  redraw();
 
-  console.log("selection: ", selection);
+  element.querySelector(".reverse").addEventListener("click", () => {
+    console.log("sort");
+    data = data.reverse();
+    redraw();
+  });
 
-  selection
-    .enter()
-    .append("rect")
-    .attr("x", 0)
-    .attr("y", (d, i) => paddingTop + (height + margin) * i)
-    .attr("width", 0)
-    .attr("height", height)
-    .transition()
-    .duration(2000)
-    .delay((d, i) => (i * delayIncr) + 200)
-    .attr("width", d => scale * d.nbr);
+  element.querySelector(".remove").addEventListener("click", () => {
+    console.log("sort");
+    data.shift();
+    redraw();
+  });
 
-  selection
-    .enter()
-    .append("text")
-    .attr("x", 0)
-    .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
-    .attr("class", "label")
-    .text(d => d.name);
+  element.querySelector(".insert").addEventListener("click", () => {
+    console.log("insert");
+    data.push({ name: "toto" + Math.random(), nbr: 15000 });
+    redraw();
+  });
 
-  selection
-    .enter()
-    .append("text")
-    .attr("x", d => scale * d.nbr + paddingRight)
-    .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
-    .attr("class", "nbr")
-    .attr("opacity", "0")
-    .text(d => d.nbr)
-    .transition()
-    .duration(2000)
-    .delay((d, i) => (i * delayIncr) + 1000)
-    .attr("opacity", "1");
+  function redraw() {
+    redrawText();
 
+    const selection = d3
+      .select(svg)
+      .selectAll("rect")
+      .data(data, (d: IGroup) => {
+        return d.name;
+      });
 
-    element.querySelector(".sort").addEventListener("click", () => {
-      console.log("toto");
-    });
+    console.log("selection: ", selection);
+
+    selection
+      .exit()
+      .attr("opacity", 1)
+      .transition()
+      .delay(0)
+      .duration(500)
+      .attr("opacity", 0)
+      .transition()
+      .remove();
+
+    selection
+      .transition()
+      .delay(500)
+      .duration(500)
+      .attr("x", 0)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i)
+      .attr("width", 0)
+      .attr("height", height)
+      .attr("width", d => {
+        console.log("update");
+        return scale * d.nbr;
+      });
+
+    selection
+      .enter()
+      .append("rect")
+      .attr("x", 0)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i)
+      .attr("width", 0)
+      .attr("height", height)
+      .transition()
+      .duration(1000)
+      .attr("width", d => scale * d.nbr);
+
+    //   selection.enter().append("text");
+
+    //   selection
+    //     .attr("x", 0)
+    //     .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
+    //     .attr("class", "label")
+    //     .text(d => d.name);
+
+    //   selection.enter().append("text");
+
+    //   selection
+    //     .attr("x", d => scale * d.nbr + paddingRight)
+    //     .attr("y", (d, i) => paddingTop + (height + margin) * i + height * 0.66)
+    //     .attr("class", "nbr")
+    //     .attr("opacity", "0")
+    //     .text(d => d.nbr)
+    //     .transition()
+    //     .duration(2000)
+    //     .delay((d, i) => i * delayIncr + 1000)
+    //     .attr("opacity", "1");
+  }
+
+  function redrawText() {
+    console.log("redrawText: ", redrawText);
+    const selection = d3
+      .select(svg)
+      .selectAll("text")
+      .data(data, (d: IGroup) => {
+        return d.name;
+      });
+
+    selection
+      .exit()
+      .attr("opacity", 1)
+      .transition()
+      .delay(0)
+      .duration(500)
+      .attr("opacity", 0)
+      .transition()
+      .remove();
+
+    selection
+      .transition()
+      .delay(500)
+      .duration(500)
+      .attr("x", 0)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
+      .attr("class", "label")
+      .text(d => d.name);
+
+    selection
+      .enter()
+      .append("text")
+      .attr("x", 0)
+      .attr("y", (d, i) => paddingTop + (height + margin) * i - offset)
+      .attr("class", "label")
+      .text(d => d.name)
+      .attr('opacity', 0)
+      .transition()
+      .duration(1000)
+      .attr('opacity', 1);
+  }
 }
