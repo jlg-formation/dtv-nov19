@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
+import { IGroup } from './interfaces/Group';
 
-export function drawHisto(element, data) {
+export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
   const scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
   console.log("scale: ", scale);
