@@ -1,17 +1,22 @@
 import "./style.css";
 import * as d3 from "d3";
-
 import { drawHisto } from "./histo-d3";
-import { IGroup } from "./interfaces/Group";
+import { BubbleBoard } from "./BubbleBoard";
 
 (async () => {
   try {
-    console.log("startxxx");
-    const data = await d3.dsv(",", "data/group.csv");
-    const sortedData: any = data.sort((a, b) => Math.sign(+b.nbr - +a.nbr));
-    sortedData.length = 10;
-    drawHisto(document.querySelector(".histo-car"), sortedData as IGroup[]);
-    console.log("end");
+    const n = 10;
+    const data = new Array(10).fill(0).map(n => ({
+      cx: Math.random(),
+      cy: Math.random(),
+      r: Math.random(),
+      key: Math.random()
+    }));
+    const bubbleBoard = new BubbleBoard(document.querySelector("svg"), data);
+    setInterval(() => {
+      bubbleBoard.update();
+      bubbleBoard.redraw();
+    }, 1000);
   } catch (e) {
     console.error(e);
   }

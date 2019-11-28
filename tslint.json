@@ -4,7 +4,8 @@
   "jsRules": {},
   "rules": {
     "ordered-imports": false,
-    "no-console": false
+    "no-console": false,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": []
 }
