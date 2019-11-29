@@ -4,6 +4,8 @@ import { IGroup } from "./interfaces/Group";
 export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
 
+  const restoredData = [...data];
+
   let scale: number;
 
   const height = 60;
@@ -20,12 +22,19 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   });
 
   element.querySelector(".remove").addEventListener("click", () => {
-    data.shift();
+    const elts = element.querySelectorAll(".selected");
+    elts.forEach((elt: any) => {
+      const d = elt.__data__;
+      data.splice(
+        data.findIndex(n => n === d),
+        1
+      );
+    });
     redraw();
   });
 
-  element.querySelector(".insert").addEventListener("click", () => {
-    data.push({ name: "toto" + Math.random(), nbr: 15000 });
+  element.querySelector(".restore").addEventListener("click", () => {
+    data = restoredData;
     redraw();
   });
 
@@ -129,11 +138,15 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .attr("y", (d, i) => paddingTop + (height + margin) * i)
       .attr("width", 0)
       .attr("height", height)
-      .on("click", d => {
-        console.log("click");
-        const i = data.findIndex(n => n === d);
-        data.splice(i, 1);
-        redraw();
+      .on("click", function(d) {
+        console.log("click", this);
+        this.classList.contains("selected")
+          ? this.classList.remove("selected")
+          : this.classList.add("selected");
+
+        // const i = data.findIndex(n => n === d);
+        // data.splice(i, 1);
+        // redraw();
       })
       .transition()
       .duration(1000)
