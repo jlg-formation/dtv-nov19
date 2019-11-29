@@ -4,7 +4,6 @@ import { IGroup } from "./interfaces/Group";
 export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
   const scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
-  console.log("scale: ", scale);
 
   const height = 60;
   const margin = 30;
@@ -17,25 +16,23 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   redraw();
 
   element.querySelector(".reverse").addEventListener("click", () => {
-    console.log("sort");
     data = data.reverse();
     redraw();
   });
 
   element.querySelector(".remove").addEventListener("click", () => {
-    console.log("sort");
     data.shift();
     redraw();
   });
 
   element.querySelector(".insert").addEventListener("click", () => {
-    console.log("insert");
+    
     data.push({ name: "toto" + Math.random(), nbr: 15000 });
     redraw();
   });
 
   element.querySelector(".update-nbr").addEventListener("click", () => {
-    console.log("insert");
+    
     data[0].nbr = data[0].nbr / 2;
     redraw();
   });
@@ -107,7 +104,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
         return d.name;
       });
 
-    console.log("selection: ", selection);
+    
 
     selection
       .exit()
@@ -125,7 +122,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .duration(500)
       .attr("y", (d, i) => paddingTop + (height + margin) * i)
       .attr("width", d => {
-        console.log("update");
+        
         return scale * d.nbr;
       });
 
@@ -142,7 +139,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   }
 
   function redrawText() {
-    console.log("redrawText: ", redrawText);
+    
     const selection = d3
       .select(svg)
       .selectAll("text.label")
