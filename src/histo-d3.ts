@@ -3,15 +3,14 @@ import { IGroup } from "./interfaces/Group";
 
 export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
-  const scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
+
+  let scale: number;
 
   const height = 60;
   const margin = 30;
   const paddingTop = 20;
   const offset = 5;
   const paddingRight = 5;
-
-  const delayIncr = 100;
 
   redraw();
 
@@ -26,18 +25,18 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   });
 
   element.querySelector(".insert").addEventListener("click", () => {
-    
     data.push({ name: "toto" + Math.random(), nbr: 15000 });
     redraw();
   });
 
   element.querySelector(".update-nbr").addEventListener("click", () => {
-    
     data[0].nbr = data[0].nbr / 2;
     redraw();
   });
 
   function redraw() {
+    scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
+
     redrawText();
     redrawNbr();
     redrawBar();
@@ -104,8 +103,6 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
         return d.name;
       });
 
-    
-
     selection
       .exit()
       .attr("opacity", 1)
@@ -122,7 +119,6 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .duration(500)
       .attr("y", (d, i) => paddingTop + (height + margin) * i)
       .attr("width", d => {
-        
         return scale * d.nbr;
       });
 
@@ -133,13 +129,18 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
       .attr("y", (d, i) => paddingTop + (height + margin) * i)
       .attr("width", 0)
       .attr("height", height)
+      .on("click", d => {
+        console.log("click");
+        const i = data.findIndex(n => n === d);
+        data.splice(i, 1);
+        redraw();
+      })
       .transition()
       .duration(1000)
       .attr("width", d => scale * d.nbr);
   }
 
   function redrawText() {
-    
     const selection = d3
       .select(svg)
       .selectAll("text.label")
