@@ -1,10 +1,14 @@
 import * as d3 from "d3";
 import { IGroup } from "./interfaces/Group";
 
+function persist(data: any) {
+  localStorage.setItem("data", JSON.stringify(data));
+}
+
 export function drawHisto(element: HTMLElement, data: IGroup[]) {
   const svg = element.querySelector("svg");
 
-  const restoredData = [...data];
+  const restoredData = JSON.parse(localStorage.getItem('origData'));
 
   let scale: number;
 
@@ -34,7 +38,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   });
 
   element.querySelector(".restore").addEventListener("click", () => {
-    data = restoredData;
+    data = [...restoredData];
     redraw();
   });
 
@@ -44,6 +48,7 @@ export function drawHisto(element: HTMLElement, data: IGroup[]) {
   });
 
   function redraw() {
+    persist(data);
     scale = (1000 / Math.max(...data.map(d => d.nbr))) * 0.95;
 
     redrawText();

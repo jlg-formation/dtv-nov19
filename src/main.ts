@@ -24,11 +24,19 @@ ORDER BY DESC(?nbr)
 (async () => {
   try {
     console.log("startxxx");
-    const data: any[] = await sparql(wikidataUrl, request);
-    const sortedData: any[] = data.sort((a, b) => Math.sign(+b.nbr - +a.nbr));
-    sortedData.length = 10;
-    drawHisto(document.querySelector(".histo-car"), sortedData as IGroup[]);
-    console.log("end");
+    const str = localStorage.getItem('data');
+    if (!str) {
+      const origData: any[] = await sparql(wikidataUrl, request);
+      const sortedData: any[] = origData.sort((a, b) => Math.sign(+b.nbr - +a.nbr));
+      sortedData.length = 10;
+      localStorage.setItem('origData', JSON.stringify(origData));
+      drawHisto(document.querySelector(".histo-car"), sortedData as IGroup[]);
+      console.log("end");
+      return;
+    }
+    const data = JSON.parse(str);
+    drawHisto(document.querySelector(".histo-car"), data as IGroup[]);
+    
   } catch (e) {
     console.error(e);
   }
